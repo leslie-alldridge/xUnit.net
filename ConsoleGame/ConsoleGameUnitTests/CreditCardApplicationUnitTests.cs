@@ -1,6 +1,7 @@
 using System;
 using ConsoleGame;
 using Xunit;
+using Moq;
 
 namespace ConsoleGameUnitTests
 {
@@ -9,7 +10,9 @@ namespace ConsoleGameUnitTests
         [Fact]
         public void Accept_high_income_applications()
         {
-            var sut = new CreditCardApplicationEvaluator();
+            var mockValidator = new Mock<IFrequentFlyerNumberValidator>();
+
+            var sut = new CreditCardApplicationEvaluator(mockValidator.Object);
 
             var application = new CreditCardApplication{GrossAnnualIncome = 100_000};
 
@@ -21,7 +24,9 @@ namespace ConsoleGameUnitTests
         [Fact]
         public void Refer_young_applicants()
         {
-            var sut = new CreditCardApplicationEvaluator();
+            var mockValidator = new Mock<IFrequentFlyerNumberValidator>();
+
+            var sut = new CreditCardApplicationEvaluator(mockValidator.Object);
 
             var application = new CreditCardApplication {Age = 19};
 
