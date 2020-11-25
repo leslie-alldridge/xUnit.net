@@ -59,7 +59,7 @@ namespace CreditCardUnitTests
                 x.IsValid(It.IsIn("x", "z"))).Returns(true);
 
             // return true when a regex is satisfied
-            mockValidator.Setup(x => x.IsValid(It.IsRegex("[a-z"))).Returns(true);
+            mockValidator.Setup(x => x.IsValid(It.IsRegex("[a-z]"))).Returns(true);
             
             var sut = new CreditCardApplicationEvaluator(mockValidator.Object);
 
