@@ -1,9 +1,8 @@
-using System;
-using ConsoleGame;
-using Xunit;
+using CreditCard;
 using Moq;
+using Xunit;
 
-namespace ConsoleGameUnitTests
+namespace CreditCardUnitTests
 {
     public class CreditCardApplicationUnitTests
     {

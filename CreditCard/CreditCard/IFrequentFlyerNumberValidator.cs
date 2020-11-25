@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ConsoleGame
+namespace CreditCard
 {
     public interface IFrequentFlyerNumberValidator
     {

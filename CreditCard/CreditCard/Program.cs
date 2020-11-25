@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ConsoleGame
+namespace CreditCard
 {
     class Program
     {
