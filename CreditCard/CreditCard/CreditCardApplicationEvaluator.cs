@@ -25,7 +25,7 @@ namespace CreditCard
 
             var isFrequentFlyerNumber = _validator.IsValid(application.FrequentFlyerNumber);
 
-            if (isFrequentFlyerNumber)
+            if (!isFrequentFlyerNumber)
             {
                 return CreditCardApplicationDecision.ReferredToHuman;
             }
