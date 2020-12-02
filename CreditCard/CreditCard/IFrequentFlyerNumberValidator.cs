@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CreditCard
+﻿namespace CreditCard
 {
     public interface IFrequentFlyerNumberValidator
     {
