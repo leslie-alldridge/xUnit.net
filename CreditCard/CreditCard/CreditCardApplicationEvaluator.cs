@@ -13,7 +13,7 @@ namespace CreditCard
 
         public CreditCardApplicationEvaluator(IFrequentFlyerNumberValidator validator)
         {
-            _validator = validator;
+            _validator = validator ?? throw new System.ArgumentNullException(nameof(validator));
         }
 
         public CreditCardApplicationDecision Evaluate(CreditCardApplication application)
