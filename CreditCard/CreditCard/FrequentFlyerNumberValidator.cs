@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CreditCard
 {
@@ -15,5 +13,6 @@ namespace CreditCard
             throw new NotImplementedException("Yes, it is hard to use");
         }
 
+        public string LicenseKey => throw new NotImplementedException("For demo purposes");
     }
 }
