@@ -149,6 +149,9 @@ namespace CreditCardUnitTests
 
             mockValidator.SetupProperty(x => x.ValidationMode);
 
+            // set up all properties
+            // use mockValidator.SetupAllProperties()
+
             var sut = new CreditCardApplicationEvaluator(mockValidator.Object);
 
             var application = new CreditCardApplication { Age = 30 };
@@ -156,6 +159,24 @@ namespace CreditCardUnitTests
             sut.Evaluate(application);
 
             Assert.Equal(ValidationMode.Detailed, mockValidator.Object.ValidationMode);
+        }
+
+        [Fact]
+        public void ValidateFrequentFlyerNumberForLowIncomeApplications()
+        {
+            var mockValidator = new Mock<IFrequentFlyerNumberValidator>();
+            mockValidator.Setup(x => x.ServiceInformation.License.LicenseKey).Returns("OK");
+
+            var sut = new CreditCardApplicationEvaluator(mockValidator.Object);
+
+            var application = new CreditCardApplication
+            {
+                FrequentFlyerNumber = "Q"
+            };
+
+            sut.Evaluate(application);
+
+            mockValidator.Verify(x => x.IsValid("Q"));
         }
     }
 }
