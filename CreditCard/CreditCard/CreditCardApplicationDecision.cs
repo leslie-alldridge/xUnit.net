@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CreditCard
+﻿namespace CreditCard
 {
     public enum CreditCardApplicationDecision
     {
         Unknown,
         AutoAccepted,
         AutoDeclined,
-        ReferredToHuman
+        ReferredToHuman,
+        ReferredToHumanFraudRisk
     }
 }
