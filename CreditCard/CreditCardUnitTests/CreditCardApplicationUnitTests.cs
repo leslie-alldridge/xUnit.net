@@ -1,4 +1,3 @@
-using System.Security.Cryptography.X509Certificates;
 using CreditCard;
 using Moq;
 using Xunit;
@@ -14,7 +13,7 @@ namespace CreditCardUnitTests
 
             var sut = new CreditCardApplicationEvaluator(mockValidator.Object);
 
-            var application = new CreditCardApplication{GrossAnnualIncome = 100_000};
+            var application = new CreditCardApplication { GrossAnnualIncome = 100_000 };
 
             var decision = sut.Evaluate(application);
 
@@ -31,7 +30,7 @@ namespace CreditCardUnitTests
 
             var sut = new CreditCardApplicationEvaluator(mockValidator.Object);
 
-            var application = new CreditCardApplication {Age = 19};
+            var application = new CreditCardApplication { Age = 19 };
 
             var decision = sut.Evaluate(application);
 
@@ -49,10 +48,10 @@ namespace CreditCardUnitTests
 
             // returns true when any string is passed to the isValid method
             mockValidator.Setup(x => x.IsValid(It.IsAny<string>())).Returns(true);
-            
+
             // returns true when any string is passed to the isValid method that begins with "x"
-            mockValidator.Setup(x => 
-                    x.IsValid(It.Is<string>(x => x.StartsWith("x"))))
+            mockValidator.Setup(x =>
+                    x.IsValid(It.Is<string>(s => s.StartsWith("x"))))
                 .Returns(true);
 
             // returns true when any string is passed to the isValid method that is between a-z
@@ -65,7 +64,7 @@ namespace CreditCardUnitTests
 
             // return true when a regex is satisfied
             mockValidator.Setup(x => x.IsValid(It.IsRegex("[a-z]"))).Returns(true);
-            
+
             var sut = new CreditCardApplicationEvaluator(mockValidator.Object);
 
             var application = new CreditCardApplication
@@ -134,7 +133,7 @@ namespace CreditCardUnitTests
 
             var sut = new CreditCardApplicationEvaluator(mockValidator.Object);
 
-            var application = new CreditCardApplication {Age = 42};
+            var application = new CreditCardApplication { Age = 42 };
 
             var decision = sut.Evaluate(application);
 
@@ -177,6 +176,60 @@ namespace CreditCardUnitTests
             sut.Evaluate(application);
 
             mockValidator.Verify(x => x.IsValid("Q"));
+        }
+
+        [Fact]
+        public void NotValidateFrequentFlyerNumberForHighIncomeApplications()
+        {
+            var mockValidator = new Mock<IFrequentFlyerNumberValidator>();
+            mockValidator.Setup(x => x.ServiceInformation.License.LicenseKey).Returns("OK");
+
+            var sut = new CreditCardApplicationEvaluator(mockValidator.Object);
+
+            var application = new CreditCardApplication
+            {
+                GrossAnnualIncome = 100_000
+            };
+
+            sut.Evaluate(application);
+
+            mockValidator.Verify(x => x.IsValid("Q"), Times.Never);
+        }
+
+        [Fact]
+        public void CheckLicenseKeyForLowIncomeApplicants()
+        {
+            var mockValidator = new Mock<IFrequentFlyerNumberValidator>();
+            mockValidator.Setup(x => x.ServiceInformation.License.LicenseKey).Returns("OK");
+
+            var sut = new CreditCardApplicationEvaluator(mockValidator.Object);
+
+            var application = new CreditCardApplication
+            {
+                GrossAnnualIncome = 90_000
+            };
+
+            sut.Evaluate(application);
+
+            mockValidator.VerifyGet(x => x.ServiceInformation.License.LicenseKey, Times.Once);
+        }
+
+        [Fact]
+        public void SetDetailedLookupForOlderApplications()
+        {
+            var mockValidator = new Mock<IFrequentFlyerNumberValidator>();
+            mockValidator.Setup(x => x.ServiceInformation.License.LicenseKey).Returns("OK");
+
+            var sut = new CreditCardApplicationEvaluator(mockValidator.Object);
+
+            var application = new CreditCardApplication
+            {
+                Age = 30
+            };
+
+            sut.Evaluate(application);
+
+            mockValidator.VerifySet(x => x.ValidationMode = ValidationMode.Detailed);
         }
     }
 }
