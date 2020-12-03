@@ -25,6 +25,7 @@ namespace CreditCardUnitTests
         public void Refer_young_applicants()
         {
             var mockValidator = new Mock<IFrequentFlyerNumberValidator>();
+            mockValidator.DefaultValue = DefaultValue.Mock;
 
             mockValidator.Setup(x => x.IsValid(It.IsAny<string>())).Returns(true);
 
@@ -41,6 +42,7 @@ namespace CreditCardUnitTests
         public void Decline_low_income_applications()
         {
             var mockValidator = new Mock<IFrequentFlyerNumberValidator>();
+            mockValidator.Setup(x => x.ServiceInformation.License.LicenseKey).Returns("OK");
 
             // returns true when the specific string "x" is passed to isValid method
             mockValidator.Setup(x => x.IsValid("x")).Returns(true);
@@ -82,8 +84,8 @@ namespace CreditCardUnitTests
         public void ReferInvalidFrequentFlyerApplications()
         {
             var mockValidator = new Mock<IFrequentFlyerNumberValidator>(MockBehavior.Loose);
-
             mockValidator.Setup(x => x.IsValid(It.IsAny<string>())).Returns(false);
+            mockValidator.Setup(x => x.ServiceInformation.License.LicenseKey).Returns("12345");
 
             var sut = new CreditCardApplicationEvaluator(mockValidator.Object);
 
@@ -94,7 +96,7 @@ namespace CreditCardUnitTests
             Assert.Equal(CreditCardApplicationDecision.ReferredToHuman, decision);
         }
 
-        [Fact]
+        /*[Fact]
         public void DeclineLowIncomeApplicationsOutDemo()
         {
             var mockValidator = new Mock<IFrequentFlyerNumberValidator>(MockBehavior.Loose);
@@ -114,7 +116,7 @@ namespace CreditCardUnitTests
             var decision = sut.EvaluateUsingOut(application);
 
             Assert.Equal(CreditCardApplicationDecision.AutoDeclined, decision);
-        }
+        }*/
 
         [Fact]
         public void Refer_when_license_key_expired()
