@@ -13,6 +13,6 @@ namespace CreditCard
             throw new NotImplementedException("Yes, it is hard to use");
         }
 
-        public string LicenseKey => throw new NotImplementedException("For demo purposes");
+        public IServiceInformation ServiceInformation => throw new NotImplementedException("For demo purposes");
     }
 }

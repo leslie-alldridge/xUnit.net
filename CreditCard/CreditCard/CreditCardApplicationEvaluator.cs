@@ -23,7 +23,7 @@ namespace CreditCard
                 return CreditCardApplicationDecision.AutoAccepted;
             }
 
-            if (_validator.LicenseKey == "EXPIRED")
+            if (_validator.ServiceInformation.License.LicenseKey == "EXPIRED")
             {
                 return CreditCardApplicationDecision.ReferredToHuman;
             }
@@ -47,7 +47,7 @@ namespace CreditCard
             return CreditCardApplicationDecision.ReferredToHuman;
         }
 
-        public CreditCardApplicationDecision EvaluateUsingOut(CreditCardApplication application)
+        /*public CreditCardApplicationDecision EvaluateUsingOut(CreditCardApplication application)
         {
             if (application.GrossAnnualIncome >= HighIncomeThreshold)
             {
@@ -71,6 +71,6 @@ namespace CreditCard
             }
 
             return CreditCardApplicationDecision.ReferredToHuman;
-        }
+        }*/
     }
 }

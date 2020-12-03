@@ -119,10 +119,17 @@ namespace CreditCardUnitTests
         [Fact]
         public void Refer_when_license_key_expired()
         {
-            var mockValidator = new Mock<IFrequentFlyerNumberValidator>();
+            // Mock property hierarchies 
+            var mockLicenseData = new Mock<ILicenseData>();
+            mockLicenseData.Setup(x => x.LicenseKey).Returns("EXPIRED");
 
+            var mockServiceInfo = new Mock<IServiceInformation>();
+            mockServiceInfo.Setup(x => x.License).Returns(mockLicenseData.Object);
+
+            var mockValidator = new Mock<IFrequentFlyerNumberValidator>();
+            mockValidator.Setup(x => x.ServiceInformation).Returns(mockServiceInfo.Object);
             mockValidator.Setup(x => x.IsValid(It.IsAny<string>())).Returns(true);
-            mockValidator.Setup(x => x.LicenseKey).Returns(GetLicenseKeyExpiryString());
+
             var sut = new CreditCardApplicationEvaluator(mockValidator.Object);
 
             var application = new CreditCardApplication {Age = 42};
@@ -130,11 +137,6 @@ namespace CreditCardUnitTests
             var decision = sut.Evaluate(application);
 
             Assert.Equal(CreditCardApplicationDecision.ReferredToHuman, decision);
-        }
-
-        string GetLicenseKeyExpiryString()
-        {
-            return "EXPIRED";
         }
     }
 }
