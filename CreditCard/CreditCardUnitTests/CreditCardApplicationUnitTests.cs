@@ -1,6 +1,8 @@
+using System;
 using CreditCard;
 using Moq;
 using Xunit;
+using Range = Moq.Range;
 
 namespace CreditCardUnitTests
 {
@@ -234,6 +236,25 @@ namespace CreditCardUnitTests
             mockValidator.Verify(x => x.IsValid(null), Times.Once);
 
             // mockValidator.VerifyNoOtherCalls(); can be used to check no other calls not already verified above are made.
+        }
+
+        [Fact]
+        public void ReferWhenFrequentFlyerValidationError()
+        {
+            var mockValidator = new Mock<IFrequentFlyerNumberValidator>();
+            mockValidator.Setup(x => x.ServiceInformation.License.LicenseKey).Returns("OK");
+            mockValidator.Setup(x => x.IsValid(It.IsAny<string>()))
+                .Throws(new Exception("Rawr"));
+
+            var sut = new CreditCardApplicationEvaluator(mockValidator.Object);
+
+            var application = new CreditCardApplication { Age = 42 };
+
+            var decision = sut.Evaluate(application);
+
+            sut.Evaluate(application);
+
+            Assert.Equal(CreditCardApplicationDecision.ReferredToHuman,decision);
         }
     }
 }
