@@ -14,5 +14,10 @@ namespace CreditCard
         }
 
         public IServiceInformation ServiceInformation => throw new NotImplementedException("For demo purposes");
+        public ValidationMode ValidationMode
+        {
+            get => throw new NotImplementedException("For demo purposes"); 
+            set => throw new NotImplementedException("For demo purposes"); 
+        }
     }
 }
