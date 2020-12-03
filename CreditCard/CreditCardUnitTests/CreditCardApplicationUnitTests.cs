@@ -229,7 +229,11 @@ namespace CreditCardUnitTests
 
             sut.Evaluate(application);
 
-            mockValidator.VerifySet(x => x.ValidationMode = ValidationMode.Detailed);
+            mockValidator.VerifySet(x => x.ValidationMode = It.IsAny<ValidationMode>(), Times.Once);
+
+            mockValidator.Verify(x => x.IsValid(null), Times.Once);
+
+            // mockValidator.VerifyNoOtherCalls(); can be used to check no other calls not already verified above are made.
         }
     }
 }
