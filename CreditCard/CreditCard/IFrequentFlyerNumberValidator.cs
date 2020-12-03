@@ -1,4 +1,6 @@
-﻿namespace CreditCard
+﻿using System;
+
+namespace CreditCard
 {
     public interface ILicenseData
     {
@@ -15,5 +17,7 @@
         void IsValid(string frequentFlyerNumber, out bool isValid);
         IServiceInformation ServiceInformation { get; }
         ValidationMode ValidationMode { get; set; }
+
+        event EventHandler ValidatorLookupPerformed;
     }
 }

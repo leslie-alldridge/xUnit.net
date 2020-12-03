@@ -256,5 +256,26 @@ namespace CreditCardUnitTests
 
             Assert.Equal(CreditCardApplicationDecision.ReferredToHuman,decision);
         }
+
+        [Fact]
+        public void IncrementLookupCount()
+        {
+            var mockValidator = new Mock<IFrequentFlyerNumberValidator>();
+            mockValidator.Setup(x => x.ServiceInformation.License.LicenseKey).Returns("OK");
+            mockValidator.Setup(x => x.IsValid(It.IsAny<string>()))
+                .Returns(true)
+                .Raises(x => x.ValidatorLookupPerformed += null, EventArgs.Empty);
+
+            var sut = new CreditCardApplicationEvaluator(mockValidator.Object);
+
+            var application = new CreditCardApplication { Age = 42 };
+
+            sut.Evaluate(application);
+
+            // manually raise the event
+            // mockValidator.Raise(x => x.ValidatorLookupPerformed += null, EventArgs.Empty);
+
+            Assert.Equal(1, sut.ValidatorLookupCount);
+        }
     }
 }
