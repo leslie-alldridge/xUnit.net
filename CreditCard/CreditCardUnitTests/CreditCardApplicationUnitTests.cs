@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using CreditCard;
 using Moq;
 using Xunit;
+using Moq.Protected;
 using Range = Moq.Range;
 
 namespace CreditCardUnitTests
@@ -333,7 +334,10 @@ namespace CreditCardUnitTests
             var mockValidator = new Mock<IFrequentFlyerNumberValidator>();
             var mockFraudLookup = new Mock<FraudLookup>();
 
-            mockFraudLookup.Setup(x => x.IsFraudRisk(It.IsAny<CreditCardApplication>())).Returns(true);
+            // mockFraudLookup.Setup(x => x.IsFraudRisk(It.IsAny<CreditCardApplication>())).Returns(true);
+            mockFraudLookup.Protected()
+                .Setup<bool>("CheckApplication", ItExpr.IsAny<CreditCardApplication>())
+                .Returns(true);
 
             var sut = new CreditCardApplicationEvaluator(mockValidator.Object, mockFraudLookup.Object);
 
