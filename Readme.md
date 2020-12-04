@@ -1,7 +1,7 @@
 **Mocking with Moq and xUnit
  | By Jason Roberts**
 
-Status: Almost complete 
+Status: Completed
 
 [Course Link](https://app.pluralsight.com/library/courses/mocking-moq-xunit/table-of-contents)
 
